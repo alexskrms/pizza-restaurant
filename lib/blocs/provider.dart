@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pizza_restaurant/blocs/bloc.dart';
 
-class Provider extends InheritedWidget{
+class provider extends InheritedWidget{
   final bloc = Bloc();
 
-  Provider({required Key key, required Widget child}): super(key: key, child:  child);
+  provider({Key? key, required Widget child}): super(key: key, child:  child);
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
@@ -12,7 +12,7 @@ class Provider extends InheritedWidget{
   }
 
   static Bloc of(BuildContext context){
-    return (context.dependOnInheritedWidgetOfExactType<Provider>()!.bloc);
+    return (context.dependOnInheritedWidgetOfExactType<provider>()!.bloc);
   }
 
 }
