@@ -3,7 +3,7 @@ import 'package:pizza_restaurant/blocs/bloc.dart';
 import 'package:pizza_restaurant/blocs/provider.dart';
 
 class pizza_restaurant extends StatelessWidget {
-
+  var pizzaName = "";
   @override
   Widget build(BuildContext context) {
     final _bloc = provider.of(context);
@@ -33,7 +33,10 @@ class pizza_restaurant extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               child: Text("Napolitana"),
-              onPressed: null,
+              onPressed: () {
+                bloc.newOrder("Napolitana");
+                pizzaName = "Napolitana";
+              },
             ),
           ),
           Container(
@@ -41,8 +44,11 @@ class pizza_restaurant extends StatelessWidget {
           ),
           Expanded(
             child: ElevatedButton(
-              child: Text("California Style"),
-              onPressed: null,
+              child: Text("California"),
+              onPressed: () {
+                bloc.newOrder("California");
+                pizzaName = "California";
+              },
             ),
           )
         ],
@@ -58,7 +64,10 @@ class pizza_restaurant extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               child: Text("Sushi"),
-              onPressed: null,
+              onPressed: () {
+                bloc.newOrder("Sushi");
+                pizzaName = "Sushi";
+              },
             ),
           ),
           Container(
@@ -67,7 +76,10 @@ class pizza_restaurant extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               child: Text("Marinada"),
-              onPressed: null,
+              onPressed: () {
+                bloc.newOrder("Marinada");
+                pizzaName = "Marinada";
+              },
             ),
           )
         ],
@@ -76,6 +88,42 @@ class pizza_restaurant extends StatelessWidget {
   }
 
   orderInformation(Bloc bloc) {
-    return Container();
+    return StreamBuilder(
+      stream: bloc.showOrders,
+      builder: (context, AsyncSnapshot<String> snapshot){
+        if(snapshot.hasData){
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.network(
+                snapshot.data.toString(),
+                fit: BoxFit.fill,
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 8.0),
+              ),
+              Text("Ready! Take your pizza $pizzaName!")
+            ],
+          );
+        }else if(snapshot.hasError){
+          return Column(
+            children: <Widget>[
+              Image.network("http://megatron.co.il/en/wp-content/uploads/sites/2/2017/11/out-of-stock.jpg",
+              fit: BoxFit.fill,
+              ),
+              Text(
+                snapshot.error.toString(),
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20.0
+                ),
+              ),
+            ],
+          );
+        }else{
+          return Text("No pizza selected!");
+        }
+      },
+    );
   }
 }
